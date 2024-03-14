@@ -7,33 +7,7 @@ class ProductManager {
         this.products = [];
     }
 
-    addProduct(productData) {
-        const { title, description, price, img, code, stock } = productData;
-
-        if (!title || !description || !price || !img || !code || !stock) {
-            console.log("Llenar todos los campos.");
-            return;
-        }
-
-        if (this.products.some(item => item.code === code)) {
-            console.log("El código debe ser único");
-            return;
-        }
-
-        const newProduct = {
-            id: ++ProductManager.ultId,
-            title,
-            description,
-            price,
-            img,
-            code,
-            stock
-        };
-
-        this.products.push(newProduct);
-    }
-
-    getProductsFromFile(filename) {
+    loadProductsFromFile(filename) {
         try {
             const fileData = fs.readFileSync(filename, 'utf8');
             const parsedData = JSON.parse(fileData);
@@ -59,6 +33,32 @@ class ProductManager {
 
     getProducts() {
         return this.products;
+    }
+
+    addProduct(productData) {
+        const { title, description, price, img, code, stock } = productData;
+
+        if (!title || !description || !price || !img || !code || !stock) {
+            console.log("Llenar todos los campos.");
+            return;
+        }
+
+        if (this.products.some(item => item.code === code)) {
+            console.log("El código debe ser único");
+            return;
+        }
+
+        const newProduct = {
+            id: ++ProductManager.ultId,
+            title,
+            description,
+            price,
+            img,
+            code,
+            stock
+        };
+
+        this.products.push(newProduct);
     }
 
     getProductById(id) {
@@ -106,7 +106,7 @@ class ProductManager {
 const manager = new ProductManager();
 
 // Lee los productos desde un archivo (si existe)
-manager.getProductsFromFile('productos.json');
+manager.loadProductsFromFile('productos.json');
 
 // Agrega productos
 manager.addProduct({
